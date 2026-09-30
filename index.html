@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Shad0wHaunter // Threat Hunting Journal</title>
+<title>Shad0wHaunter // Portfolio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
 <style>
@@ -47,11 +47,11 @@ footer{border-top:1px solid var(--line);padding:22px 0;font:12px var(--mono);col
 </head>
 <body>
 <header><div class="wrap">
-<a class="logo" href="#/">Shad0w<span>Haunter</span> 👻</a>
+<a class="logo" href="#/">Shad0w<span>Haunter</span></a>
 <nav><a href="#/" data-r="about">about</a><a href="#/projects" data-r="projects">projects</a><a href="#/blog" data-r="blog">blog</a></nav>
 </div></header>
 <main><div class="wrap" id="app"></div></main>
-<footer><div class="wrap">© <span id="yr"></span> Shad0wHaunter // hunting in the dark</div></footer>
+<footer><div class="wrap">© <span id="yr"></span> Shad0wHaunter // Emily P.</div></footer>
 
 <script>
 /* =====================================================================
@@ -59,10 +59,11 @@ footer{border-top:1px solid var(--line);padding:22px 0;font:12px var(--mono);col
    ===================================================================== */
 const SITE = {
   handle: "Shad0wHaunter",
-  tagline: "Cybersecurity professional learning to hunt threats.",
+  tagline: "Demo / automation engineer transitioning to threat hunting.",
   bio: [
     "Hi, I'm Emily aka (Shad0wHaunter). I work in cybersecurity and I'm building my skills in **threat hunting**: proactively searching for adversaries that slipped past automated defenses.",
-    "This site is my learning journal. I post what I'm studying, labs I build, hunts I run, and the mistakes along the way. Writing it down is how I make it stick."
+    "This site is my learning journal. I post what I'm studying, CTF write ups, blog posts about something I'm learning about, etc.",
+    "If I'm not working or threat hunting, you can find me opening Pokemon Cards, playing Pickleball or watching F1."
   ],
   // progress: 0-100
   learning: [
@@ -169,7 +170,7 @@ function about(){
 <h2>About me</h2>${SITE.bio.map(b=>`<p>${inline(b)}</p>`).join("")}
 <h2>Currently learning</h2><div class="bars">${SITE.learning.map(l=>`<div>${esc(l.name)} <span style="float:right;color:var(--mute)">${l.pct}%</span><i><b style="width:${l.pct}%"></b></i></div>`).join("")}</div>
 <h2>Latest posts</h2>${sorted().slice(0,3).map(postCard).join("")}
-<h2>Find me</h2><p>${SITE.links.map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join(" &nbsp;/&nbsp; ")}</p>`;
+<h2>Contact</h2><p>${SITE.links.map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join(" &nbsp;/&nbsp; ")}</p>`;
 }
 function projects(){
   return `<h1>Projects</h1><p class="meta">Things I'm building while I learn.</p>`+PROJECTS.map(p=>{
