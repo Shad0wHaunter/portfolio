@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Shad0wHaunter // Threat Hunting Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b0813;--panel:#141024;--line:#2a2145;--text:#e6e1f5;--mute:#9a90b8;--acc:#a855f7;--acc2:#c084fc;--glow:rgba(168,85,247,.25);
+--mono:'JetBrains Mono',ui-monospace,Menlo,Consolas,monospace;--sans:'Inter',system-ui,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#f6f2ff;--panel:#fff;--line:#ddd0f5;--text:#1d1433;--mute:#6b5f8a;--acc:#7c22d4;--acc2:#6d1fc0;--glow:rgba(124,34,212,.15)}}
+:root[data-theme="light"]{--bg:#f6f2ff;--panel:#fff;--line:#ddd0f5;--text:#1d1433;--mute:#6b5f8a;--acc:#7c22d4;--acc2:#6d1fc0;--glow:rgba(124,34,212,.15)}
+:root[data-theme="dark"]{--bg:#0b0813;--panel:#141024;--line:#2a2145;--text:#e6e1f5;--mute:#9a90b8;--acc:#a855f7;--acc2:#c084fc;--glow:rgba(168,85,247,.25)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font:16px/1.7 var(--sans);
+background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:48px 48px;background-attachment:fixed}
+body::before{content:"";position:fixed;inset:0;background:radial-gradient(ellipse at top,transparent 0,var(--bg) 75%);pointer-events:none;z-index:-1}
+a{color:var(--acc2);text-decoration:none}a:hover{text-decoration:underline}
+.wrap{max-width:820px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);background:color-mix(in srgb,var(--bg) 88%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line);z-index:5}
+header .wrap{display:flex;align-items:center;justify-content:space-between;height:56px;font-family:var(--mono)}
+.logo{font-weight:600;color:var(--text)}.logo span{color:var(--acc)}
+nav{display:flex;gap:18px;font-size:14px}nav a{color:var(--mute)}nav a.on,nav a:hover{color:var(--acc2);text-decoration:none}
+main{padding:40px 0 60px;min-height:70vh}
+h1,h2,h3{font-family:var(--mono);line-height:1.25}
+h1{font-size:2rem;margin:.2em 0}h2{font-size:1.3rem;margin:2em 0 .6em;color:var(--acc2)}h2::before{content:"## ";color:var(--acc)}
+.term{background:var(--panel);border:1px solid var(--line);border-radius:10px;box-shadow:0 0 30px var(--glow);overflow:hidden}
+.term .bar{padding:8px 14px;border-bottom:1px solid var(--line);font:12px var(--mono);color:var(--mute)}
+.term .body{padding:20px;font-family:var(--mono);font-size:14px;overflow-x:auto}
+.p{color:var(--acc)}.cur{display:inline-block;width:8px;height:1em;background:var(--acc);vertical-align:-2px;animation:b 1s steps(1) infinite}@keyframes b{50%{opacity:0}}
+.card{display:block;background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px;margin:14px 0;color:var(--text);transition:.15s}
+.card:hover{border-color:var(--acc);box-shadow:0 0 20px var(--glow);text-decoration:none}
+.card h3{margin:0 0 4px;font-size:1.05rem}.card p{margin:6px 0 0;color:var(--mute);font-size:15px}
+.meta{font:12px var(--mono);color:var(--mute)}
+.tag{display:inline-block;font:11px var(--mono);color:var(--acc2);border:1px solid var(--line);border-radius:99px;padding:1px 9px;margin:6px 6px 0 0}
+.bars div{margin:10px 0;font:13px var(--mono)}.bars i{display:block;height:6px;border-radius:4px;background:var(--line);margin-top:4px;overflow:hidden}.bars b{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2))}
+.post h1{margin-bottom:0}.post p,.post li{color:var(--text)}
+pre{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:6px;padding:14px;overflow-x:auto;font:13px/1.5 var(--mono)}
+code{font-family:var(--mono);background:var(--panel);padding:1px 6px;border-radius:4px;font-size:.9em;color:var(--acc2)}pre code{padding:0;background:none;color:var(--text)}
+.filters button{font:12px var(--mono);background:none;color:var(--mute);border:1px solid var(--line);border-radius:99px;padding:3px 12px;margin:0 6px 6px 0;cursor:pointer}
+.filters button.on{color:var(--bg);background:var(--acc);border-color:var(--acc)}
+footer{border-top:1px solid var(--line);padding:22px 0;font:12px var(--mono);color:var(--mute);text-align:center}
+</style>
+</head>
+<body>
+<header><div class="wrap">
+<a class="logo" href="#/">Shad0w<span>Haunter</span> 👻</a>
+<nav><a href="#/" data-r="about">about</a><a href="#/projects" data-r="projects">projects</a><a href="#/blog" data-r="blog">blog</a></nav>
+</div></header>
+<main><div class="wrap" id="app"></div></main>
+<footer><div class="wrap">© <span id="yr"></span> Shad0wHaunter // hunting in the dark</div></footer>
+
+<script>
+/* =====================================================================
+   EDIT ME — everything on the site lives in this config block.
+   ===================================================================== */
+const SITE = {
+  handle: "Shad0wHaunter",
+  tagline: "Cybersecurity professional learning to hunt threats.",
+  bio: [
+    "Hi, I'm Emily aka (Shad0wHaunter). I work in cybersecurity and I'm building my skills in **threat hunting**: proactively searching for adversaries that slipped past automated defenses.",
+    "This site is my learning journal. I post what I'm studying, labs I build, hunts I run, and the mistakes along the way. Writing it down is how I make it stick."
+  ],
+  // progress: 0-100
+  learning: [
+    { name: "MITRE ATT&CK mapping", pct: 40 },
+    { name: "Sigma rules & detection engineering", pct: 25 },
+    { name: "KQL / SPL querying", pct: 35 },
+    { name: "Windows event log analysis", pct: 50 }
+  ],
+  links: [ // add/remove freely
+    { label: "GitHub", url: "https://github.com/" },
+    { label: "LinkedIn", url: "https://linkedin.com/" }
+  ]
+};
+
+const PROJECTS = [
+  { title: "Home Threat Hunting Lab", status: "In progress", tags: ["lab","Sysmon","ELK"],
+    desc: "A virtual lab with Windows endpoints, Sysmon and a SIEM to practice hunts against simulated attacker behavior.", url: "" },
+  { title: "Hunt Hypotheses Notebook", status: "Planned", tags: ["ATT&CK","docs"],
+    desc: "A growing collection of hypothesis-driven hunts mapped to MITRE ATT&CK techniques.", url: "" }
+];
+
+/* ---- BLOG: to add a post, copy one block below and put it at the TOP.
+   Body is Markdown-lite: ## headings, **bold**, `code`, [links](url),
+   - lists, and code fences using ~~~ (three tildes). ---- */
+const POSTS = [
+{
+  slug: "first-hunt-hypothesis",
+  title: "My First Hunt Hypothesis: Suspicious PowerShell",
+  date: "2026-09-20",
+  tags: ["hunting","powershell"],
+  summary: "Turning a vague hunch into a testable hypothesis and a first query.",
+  body: `
+Threat hunting starts with a **hypothesis**, not a tool. Mine was:
+
+- Attackers often use encoded PowerShell to hide commands.
+- If that's happening here, I should see \`-enc\` or \`-EncodedCommand\` in process command lines.
+
+## The query
+
+~~~
+process where process.name == "powershell.exe"
+  and process.command_line : ("*-enc*", "*-EncodedCommand*")
+~~~
+
+## What I learned
+
+A lot of results were legitimate admin scripts. Baselining what's *normal* is half the job. Next up: filtering by parent process.
+`
+},
+{
+  slug: "welcome",
+  title: "Welcome to the Haunt",
+  date: "2026-09-01",
+  tags: ["meta"],
+  summary: "Why I'm learning threat hunting in public.",
+  body: `
+This blog is my public notebook for learning **threat hunting**.
+
+## What to expect
+
+- Lab builds and writeups
+- Hunt hypotheses and queries
+- Honest notes on what didn't work
+
+Thanks for stopping by.
+`
+}
+];
+
+/* =====================  ENGINE (no need to edit)  ===================== */
+const $=s=>document.querySelector(s), app=$("#app");
+const esc=s=>s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+const safeUrl=u=>/^(https?:|mailto:|#)/i.test(u)?u:"#";
+function inline(s){
+  s=esc(s);
+  return s.replace(/`([^`]+)`/g,"<code>$1</code>")
+   .replace(/\*\*([^*]+)\*\*/g,"<strong>$1</strong>")
+   .replace(/\*([^*]+)\*/g,"<em>$1</em>")
+   .replace(/\[([^\]]+)\]\(([^)]+)\)/g,(m,t,u)=>`<a href="${safeUrl(u)}" target="_blank" rel="noopener">${t}</a>`);
+}
+function md(src){
+  const L=src.trim().split("\n"); let o="",i=0;
+  while(i<L.length){
+    const l=L[i];
+    if(l.startsWith("~~~")){let c=[];i++;while(i<L.length&&!L[i].startsWith("~~~"))c.push(L[i++]);i++;o+=`<pre><code>${esc(c.join("\n"))}</code></pre>`;}
+    else if(/^## /.test(l)){o+=`<h2>${inline(l.slice(3))}</h2>`;i++;}
+    else if(/^### /.test(l)){o+=`<h3>${inline(l.slice(4))}</h3>`;i++;}
+    else if(/^- /.test(l)){o+="<ul>";while(i<L.length&&/^- /.test(L[i]))o+=`<li>${inline(L[i++].slice(2))}</li>`;o+="</ul>";}
+    else if(l.trim()===""){i++;}
+    else{let p=[];while(i<L.length&&L[i].trim()!==""&&!/^(## |### |- |~~~)/.test(L[i]))p.push(L[i++]);o+=`<p>${inline(p.join(" "))}</p>`;}
+  }
+  return o;
+}
+const fmt=d=>new Date(d+"T00:00:00").toLocaleDateString("en-US",{year:"numeric",month:"short",day:"numeric"});
+const tags=t=>t.map(x=>`<span class="tag">${esc(x)}</span>`).join("");
+const sorted=()=>[...POSTS].sort((a,b)=>b.date.localeCompare(a.date));
+const postCard=p=>`<a class="card" href="#/blog/${p.slug}"><div class="meta">${fmt(p.date)}</div><h3>${esc(p.title)}</h3><p>${esc(p.summary)}</p>${tags(p.tags)}</a>`;
+
+function about(){
+  return `<div class="term"><div class="bar">● ● ●&nbsp; ${esc(SITE.handle.toLowerCase())}@haunt:~</div><div class="body">
+<div><span class="p">$</span> whoami</div><div>${esc(SITE.handle)}</div>
+<div style="margin-top:8px"><span class="p">$</span> cat role.txt</div><div>${esc(SITE.tagline)}</div>
+<div style="margin-top:8px"><span class="p">$</span> <span class="cur"></span></div></div></div>
+<h2>About me</h2>${SITE.bio.map(b=>`<p>${inline(b)}</p>`).join("")}
+<h2>Currently learning</h2><div class="bars">${SITE.learning.map(l=>`<div>${esc(l.name)} <span style="float:right;color:var(--mute)">${l.pct}%</span><i><b style="width:${l.pct}%"></b></i></div>`).join("")}</div>
+<h2>Latest posts</h2>${sorted().slice(0,3).map(postCard).join("")}
+<h2>Find me</h2><p>${SITE.links.map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join(" &nbsp;/&nbsp; ")}</p>`;
+}
+function projects(){
+  return `<h1>Projects</h1><p class="meta">Things I'm building while I learn.</p>`+PROJECTS.map(p=>{
+    const t=`<div class="meta">${esc(p.status)}</div><h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p>${tags(p.tags)}`;
+    return p.url?`<a class="card" href="${safeUrl(p.url)}" target="_blank" rel="noopener">${t}</a>`:`<div class="card">${t}</div>`;
+  }).join("");
+}
+let filter="all";
+function blog(){
+  const all=[...new Set(POSTS.flatMap(p=>p.tags))].sort();
+  const list=sorted().filter(p=>filter==="all"||p.tags.includes(filter));
+  return `<h1>Blog</h1><p class="meta">Progress updates & lab notes.</p>
+<div class="filters">${["all",...all].map(t=>`<button class="${t===filter?"on":""}" data-f="${esc(t)}">${esc(t)}</button>`).join("")}</div>`+list.map(postCard).join("");
+}
+function post(slug){
+  const p=POSTS.find(x=>x.slug===slug);
+  if(!p)return `<h1>404</h1><p>Nothing here. <a href="#/blog">Back to blog</a></p>`;
+  return `<a class="meta" href="#/blog">← back to blog</a><article class="post"><div class="meta" style="margin-top:18px">${fmt(p.date)}</div><h1>${esc(p.title)}</h1>${tags(p.tags)}${md(p.body)}</article>`;
+}
+function route(){
+  const h=location.hash.replace(/^#\/?/,"").split("/"), r=h[0]||"about";
+  app.innerHTML = r==="projects"?projects(): r==="blog"?(h[1]?post(h[1]):blog()): about();
+  document.querySelectorAll("nav a").forEach(a=>a.classList.toggle("on",a.dataset.r===r));
+  document.title = (r==="blog"&&h[1]&&POSTS.find(x=>x.slug===h[1])?.title||"Shad0wHaunter")+" // Threat Hunting Journal";
+  window.scrollTo(0,0);
+}
+app.addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(b){filter=b.dataset.f;const y=scrollY;app.innerHTML=blog();scrollTo(0,y);}});
+addEventListener("hashchange",route);
+$("#yr").textContent=new Date().getFullYear();
+route();
+</script>
+</body>
+</html>
