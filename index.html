@@ -58,69 +58,49 @@ footer{border-top:1px solid var(--line);padding:22px 0;font:12px var(--mono);col
    EDIT ME — everything on the site lives in this config block.
    ===================================================================== */
 const SITE = {
-  handle: "Shad0wHaunter",
+  handle: "Shad0wHaunter / Emily",
   tagline: "Demo / automation engineer transitioning to threat hunting.",
   bio: [
     "Hi, I'm Emily aka (Shad0wHaunter). I work in cybersecurity and I'm building my skills in **threat hunting**: proactively searching for adversaries that slipped past automated defenses.",
-    "This site is my learning journal. I post what I'm studying, CTF write ups, blog posts about something I'm learning about, etc.",
-    "If I'm not working or threat hunting, you can find me opening Pokemon Cards, playing Pickleball or watching F1."
+    "This site is my learning journal. I'll post what I'm studying, CTF write ups, blog posts about something I'm learning about, etc.",
+    "If I'm not working or threat hunting, you can find me opening Pokémon Cards, playing Pickleball or watching F1."
   ],
   // progress: 0-100
   learning: [
-    { name: "MITRE ATT&CK mapping", pct: 40 },
-    { name: "Sigma rules & detection engineering", pct: 25 },
-    { name: "KQL / SPL querying", pct: 35 },
-    { name: "Windows event log analysis", pct: 50 }
+    { name: "KC7 Cyber Security Analyst 1 Path", pct: 43 },
+    { name: "TryHackMe SOC Level 1 Path", pct: 38 },
+   { name: "CompTIA Security+", pct: 50 }
   ],
   links: [ // add/remove freely
-    { label: "GitHub", url: "https://github.com/" },
-    { label: "LinkedIn", url: "https://linkedin.com/" }
+    { label: "GitHub", url: "https://github.com/Shad0wHaunter" },
+    { label: "LinkedIn", url: "https://www.linkedin.com/in/emily-platz/" }
   ]
 };
 
+/*   
+----- commenting this out for now while I focus on these learning paths and complete sec+
 const PROJECTS = [
   { title: "Home Threat Hunting Lab", status: "In progress", tags: ["lab","Sysmon","ELK"],
     desc: "A virtual lab with Windows endpoints, Sysmon and a SIEM to practice hunts against simulated attacker behavior.", url: "" },
   { title: "Hunt Hypotheses Notebook", status: "Planned", tags: ["ATT&CK","docs"],
     desc: "A growing collection of hypothesis-driven hunts mapped to MITRE ATT&CK techniques.", url: "" }
 ];
+*/
 
 /* ---- BLOG: to add a post, copy one block below and put it at the TOP.
    Body is Markdown-lite: ## headings, **bold**, `code`, [links](url),
    - lists, and code fences using ~~~ (three tildes). ---- */
 const POSTS = [
 {
-  slug: "first-hunt-hypothesis",
-  title: "My First Hunt Hypothesis: Suspicious PowerShell",
-  date: "2026-09-20",
-  tags: ["hunting","powershell"],
-  summary: "Turning a vague hunch into a testable hypothesis and a first query.",
-  body: `
-Threat hunting starts with a **hypothesis**, not a tool. Mine was:
-
-- Attackers often use encoded PowerShell to hide commands.
-- If that's happening here, I should see \`-enc\` or \`-EncodedCommand\` in process command lines.
-
-## The query
-
-~~~
-process where process.name == "powershell.exe"
-  and process.command_line : ("*-enc*", "*-EncodedCommand*")
-~~~
-
-## What I learned
-
-A lot of results were legitimate admin scripts. Baselining what's *normal* is half the job. Next up: filtering by parent process.
-`
-},
-{
   slug: "welcome",
   title: "Welcome to the Haunt",
-  date: "2026-09-01",
-  tags: ["meta"],
+  date: "2026-11-01",
+  tags: ["intro"],
   summary: "Why I'm learning threat hunting in public.",
   body: `
-This blog is my public notebook for learning **threat hunting**.
+This blog is my public notebook for learning **threat hunting**. As someone who doesn't do threat hunting for their day job, I'm using this 
+site as my journal throughout this journey to a career transition in detection engineering / threat hunting. I have a long way to go before 
+I'm ready, but I am excited to put in the work to get there!
 
 ## What to expect
 
@@ -128,7 +108,7 @@ This blog is my public notebook for learning **threat hunting**.
 - Hunt hypotheses and queries
 - Honest notes on what didn't work
 
-Thanks for stopping by.
+Thanks for stopping by!
 `
 }
 ];
