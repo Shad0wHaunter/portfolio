@@ -78,10 +78,12 @@ const SITE = {
 };
    
 const PROJECTS = [
+/*
   { title: "Home Threat Hunting Lab", status: "In progress", tags: ["lab","Sysmon","ELK"],
     desc: "A virtual lab with Windows endpoints, Sysmon and a SIEM to practice hunts against simulated attacker behavior.", url: "" },
   { title: "Hunt Hypotheses Notebook", status: "Planned", tags: ["ATT&CK","docs"],
     desc: "A growing collection of hypothesis-driven hunts mapped to MITRE ATT&CK techniques.", url: "" }
+*/
 ];
 
 /* ---- BLOG: to add a post, copy one block below and put it at the TOP.
@@ -150,7 +152,7 @@ function about(){
 <h2>Contact</h2><p>${SITE.links.map(l=>`<a href="${safeUrl(l.url)}" target="_blank" rel="noopener">${esc(l.label)}</a>`).join(" &nbsp;/&nbsp; ")}</p>`;
 }
 function projects(){
-  return `<h1>Projects</h1><p class="meta">Things I'm building while I learn.</p>`+PROJECTS.map(p=>{
+  return `<h1>Projects</h1><p class="meta">Coming Soon!</p>`+PROJECTS.map(p=>{
     const t=`<div class="meta">${esc(p.status)}</div><h3>${esc(p.title)}</h3><p>${esc(p.desc)}</p>${tags(p.tags)}`;
     return p.url?`<a class="card" href="${safeUrl(p.url)}" target="_blank" rel="noopener">${t}</a>`:`<div class="card">${t}</div>`;
   }).join("");
